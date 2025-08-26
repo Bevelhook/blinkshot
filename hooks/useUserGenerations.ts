@@ -10,6 +10,8 @@ export type Generation = {
 type Session = {
   sessionId: string;
   generations: Generation[];
+  selectedStyleValue?: string;
+  iterativeMode?: boolean;
 };
 
 type ImageResponse = {
@@ -129,6 +131,22 @@ const useUserGenerations = () => {
     }));
   };
 
+  const setSelectedStyleValueForCurrentSession = (value: string) => {
+    const sessionId = ensureSessionId();
+    upsertSession(sessionId, (session) => ({
+      ...session,
+      selectedStyleValue: value,
+    }));
+  };
+
+  const setIterativeModeForCurrentSession = (value: boolean) => {
+    const sessionId = ensureSessionId();
+    upsertSession(sessionId, (session) => ({
+      ...session,
+      iterativeMode: value,
+    }));
+  };
+
   const deleteSession = (sessionId: string) => {
     setSessions((previousSessions) => {
       const remainingSessions = previousSessions.filter(
@@ -159,6 +177,11 @@ const useUserGenerations = () => {
     currentSessionId,
     addGeneration,
     deleteSession,
+    // Session-scoped UI state
+    selectedStyleValue: currentSession?.selectedStyleValue ?? "",
+    setSelectedStyleValue: setSelectedStyleValueForCurrentSession,
+    iterativeMode: currentSession?.iterativeMode ?? false,
+    setIterativeMode: setIterativeModeForCurrentSession,
   };
 };
 

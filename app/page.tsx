@@ -26,7 +26,7 @@ function HomeContent() {
   const [prompt, setPrompt] = useState("");
   const [restoredPrompt, setRestoredPrompt] = useState<string | null>(null);
   const [isRestoring, setIsRestoring] = useState(false);
-  const [iterativeMode, setIterativeMode] = useState(false);
+  // iterativeMode is now session-scoped via the hook
   const [userAPIKey, setUserAPIKey] = useState(() => {
     // Only run in browser
     if (typeof window !== "undefined") {
@@ -34,7 +34,7 @@ function HomeContent() {
     }
     return "";
   });
-  const [selectedStyleValue, setSelectedStyleValue] = useState("");
+  // selectedStyleValue is now session-scoped via the hook
   const wordCount = prompt.trim() ? prompt.trim().split(/\s+/).length : 0;
   const debounceDelay = wordCount <= 2 ? 900 : wordCount <= 5 ? 600 : 350;
   const debouncedPrompt = useDebounce(prompt, debounceDelay);
@@ -44,6 +44,10 @@ function HomeContent() {
     currentSessionId,
     addGeneration,
     deleteSession,
+    selectedStyleValue,
+    setSelectedStyleValue,
+    iterativeMode,
+    setIterativeMode,
   } = useUserGenerations();
   const generations = currentSession?.generations ?? [];
   let [activeIndex, setActiveIndex] = useState<number>();
