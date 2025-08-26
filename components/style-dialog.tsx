@@ -31,7 +31,17 @@ export default function StyleDialog({ value, setValue }: StyleDialogProps) {
           type="button"
           className="inline-flex items-center justify-center gap-1.5 rounded-sm border-[0.5px] border-gray-350 bg-gray-400 px-2 py-1.5 text-gray-200"
         >
-          <PictureIcon className="size-[12px]" />
+          {selectedStyle ? (
+            <Image
+              src={selectedStyle.image}
+              alt={selectedStyle.label}
+              width={12}
+              height={12}
+              className="size-[12px] rounded-[2px] object-cover"
+            />
+          ) : (
+            <PictureIcon className="size-[12px]" />
+          )}
           {selectedStyle ? `Style: ${selectedStyle.label}` : "Styles"}
         </button>
       </DialogTrigger>
