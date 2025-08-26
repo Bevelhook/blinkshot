@@ -12,7 +12,7 @@ import { Footer } from "@/components/layout/footer";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "@uidotdev/usehooks";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import useUserGenerations from "@/hooks/useUserGenerations";
 import GenerationStrip from "@/components/generation-strip";
 import { timeAgo } from "@/lib/utils";
@@ -22,7 +22,7 @@ type ImageResponse = {
   timings: { inference: number };
 };
 
-export default function Home() {
+function HomeContent() {
   const [prompt, setPrompt] = useState("");
   const [restoredPrompt, setRestoredPrompt] = useState<string | null>(null);
   const [isRestoring, setIsRestoring] = useState(false);
@@ -326,5 +326,13 @@ export default function Home() {
         <Footer />
       </div>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={null}>
+      <HomeContent />
+    </Suspense>
   );
 }
