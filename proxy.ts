@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from "next/server";
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   let country = req.geo?.country;
   // Temporarily blocking traffic from Russia since I have too many requests from there.
   if (country === "RU") {
