@@ -45,7 +45,7 @@ export async function POST(req: Request) {
   }
 
   if (ratelimit && !userAPIKey) {
-    const identifier = getIPAddress();
+    const identifier = await getIPAddress();
 
     const { success } = await ratelimit.limit(identifier);
     if (!success) {
@@ -89,13 +89,14 @@ export async function POST(req: Request) {
 
 export const runtime = "edge";
 
-function getIPAddress() {
+async function getIPAddress() {
   const FALLBACK_IP_ADDRESS = "0.0.0.0";
-  const forwardedFor = headers().get("x-forwarded-for");
+  const headersList = await headers();
+  const forwardedFor = headersList.get("x-forwarded-for");
 
   if (forwardedFor) {
     return forwardedFor.split(",")[0] ?? FALLBACK_IP_ADDRESS;
   }
 
-  return headers().get("x-real-ip") ?? FALLBACK_IP_ADDRESS;
+  return headersList.get("x-real-ip") ?? FALLBACK_IP_ADDRESS;
 }
